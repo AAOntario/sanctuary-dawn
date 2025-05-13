@@ -15,8 +15,15 @@ EXPOSE 2222 11434 3000 8080 7777 8888
 # Install Python packages and uvx (for OpenWebUI runtime install)
 RUN pip install --no-cache-dir jupyterlab uv uvx
 
-# Install Ollama (latest)
-RUN curl -fsSL https://ollama.com/install.sh | sh
+# --- PATCH STARTS HERE ---
+# Install Ollama with Debug Logging
+RUN curl -fsSL https://ollama.com/install.sh -o /tmp/ollama_install.sh && \
+    echo "---- BEGIN OLLAMA INSTALL SCRIPT ----" && \
+    cat /tmp/ollama_install.sh && \
+    echo "---- END OLLAMA INSTALL SCRIPT ----" && \
+    bash /tmp/ollama_install.sh && \
+    echo "Ollama installation script executed successfully."
+# --- PATCH ENDS HERE ---
 
 # Default model storage and workspace
 ENV OLLAMA_MODELS=/workspace/models
